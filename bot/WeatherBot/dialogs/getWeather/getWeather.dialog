@@ -1,0 +1,110 @@
+{
+  "$kind": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "id": "T5man0",
+    "name": "getWeather",
+    "description": ""
+  },
+  "autoEndDialog": true,
+  "defaultResultProperty": "dialog.result",
+  "triggers": [
+    {
+      "$kind": "Microsoft.OnBeginDialog",
+      "$designer": {
+        "name": "BeginDialog",
+        "description": "",
+        "id": "9w05xr"
+      },
+      "actions": [
+        {
+          "$kind": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "yMJ83x"
+          },
+          "activity": "${SendActivity_yMJ83x()}"
+        },
+        {
+          "$kind": "Microsoft.SetProperty",
+          "$designer": {
+            "id": "aeeypv"
+          },
+          "property": "user.zipcode",
+          "value": "=@zipcode"
+        },
+        {
+          "$kind": "Microsoft.TextInput",
+          "$designer": {
+            "id": "pzfIaG"
+          },
+          "disabled": false,
+          "maxTurnCount": 3,
+          "alwaysPrompt": false,
+          "allowInterruptions": true,
+          "prompt": "${TextInput_Prompt_pzfIaG()}",
+          "unrecognizedPrompt": "${TextInput_UnrecognizedPrompt_pzfIaG()}",
+          "invalidPrompt": "${TextInput_InvalidPrompt_pzfIaG()}",
+          "property": "user.zipcode",
+          "outputFormat": "=trim(this.value)",
+          "validations": [
+            "length(this.value) == 5"
+          ],
+          "defaultValue": "98052"
+        },
+        {
+          "$kind": "Microsoft.HttpRequest",
+          "$designer": {
+            "id": "0UTs89"
+          },
+          "method": "GET",
+          "url": "http://weatherbot-ignite-2019.azurewebsites.net/api/getWeather?zipcode=${user.zipcode}&api_token=e980f2054769beb00fdcc6d9ddfca811",
+          "resultProperty": "dialog.api_response",
+          "responseType": "json",
+          "contentType": "application/json"
+        },
+        {
+          "$kind": "Microsoft.IfCondition",
+          "$designer": {
+            "id": "QPY7RU"
+          },
+          "condition": "=dialog.api_response.statusCode == 200",
+          "actions": [
+            {
+              "$kind": "Microsoft.SetProperty",
+              "$designer": {
+                "id": "Vwa7OE"
+              },
+              "property": "dialog.weather",
+              "value": "=dialog.api_response.content"
+            },
+            {
+              "$kind": "Microsoft.SendActivity",
+              "$designer": {
+                "id": "cA8GmD"
+              },
+              "activity": "${SendActivity_cA8GmD()}"
+            }
+          ],
+          "elseActions": [
+            {
+              "$kind": "Microsoft.SendActivity",
+              "$designer": {
+                "id": "5ERac8"
+              },
+              "activity": "${SendActivity_5ERac8()}"
+            },
+            {
+              "$kind": "Microsoft.DeleteProperty",
+              "$designer": {
+                "id": "eoEHwN"
+              },
+              "property": "user.zipcode"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "generator": "getWeather.lg",
+  "recognizer": "getWeather.lu.qna",
+  "id": "getWeather"
+}

@@ -1,0 +1,8 @@
+{
+    "luis": {
+        "WeatherBot_en_us_lu": {
+            "appId": "f6bf55a2-0e30-4999-99dd-debbafe7f16d",
+            "version": "0.4"
+        }
+    }
+}
